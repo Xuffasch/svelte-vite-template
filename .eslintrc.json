@@ -14,12 +14,12 @@
       "files": ["**/*.svelte"],
       "processor": "svelte3/svelte3",
       "rules": {
-        "quotes": ["warn", "double"]
+        "quotes": ["warn", "single"]
       }
     }
   ],
   "extends": "eslint:recommended",
   "rules": {
-    "quotes": ["warn", "double"]
+    "quotes": ["warn", "single"]
   }
 }
