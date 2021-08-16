@@ -1,5 +1,5 @@
 export function printOnConsole(str) {
   // Call console to print string
-  let message = 'print on console';
+  let message = "print on console"
   console.log(message, str);
 }
