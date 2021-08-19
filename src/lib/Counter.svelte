@@ -1,7 +1,9 @@
 <script lang="ts">
+  import { printOnConsole } from './tools/console';
   let count = 0;
   const increment = () => {
     count += 1;
+    printOnConsole(`That is current count ${count}`);
   };
 </script>
 
