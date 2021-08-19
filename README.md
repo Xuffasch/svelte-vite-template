@@ -96,6 +96,24 @@ For Terminal usage, install :
 
     - "[javascriptreact]": VSCode language override to define specific VSCode settings for codes recognized as javascript. In our case, apply prettier-vscode extension on .js files as currently js files is associated to the type "javascriptreact".
 
+      _NOTE_ I currently have to make that a files.association in the VSCode user.settings to link .js files to the type javascriptreact :
+
+      ```js
+        // user (or workspace) settings.json
+
+      {
+        ...
+        "files.associations": {
+          "*.js": "javascriptreact"
+        },
+        ...
+      }
+      ```
+
+      in order to have automatic application of prettier config file format options apply on my .js files. Removing this link _breaks_ prettier from running on js file.
+
+      I don't know if it is a bug or something in my VSCode settings.
+
 2.  Add format options in a .prettierrc.json
 
     In the root folder of a Vite + Svelte project, add a .prettierrc.json file to define prettier format settings.
