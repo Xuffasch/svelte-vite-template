@@ -7,7 +7,7 @@
         "build": "vite build",
         "serve": "vite preview",
         "lint": "eslint './src/**/*.{js,svelte}'",
-        "format": "prettier --write ./src/**/*.{js,svelte} ./src/*.{js,svelte}",
+        "format": "prettier --plugin=prettier-plugin-svelte --write ./src/**/*.{js,svelte} ./src/*.{js,svelte}",
         "prelint": "pnpm run format"
     },
     "devDependencies": {
