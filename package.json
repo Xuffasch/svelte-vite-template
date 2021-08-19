@@ -8,7 +8,8 @@
         "serve": "vite preview",
         "lint": "eslint './src/**/*.{js,svelte}'",
         "format": "prettier --plugin=prettier-plugin-svelte --write ./src/**/*.{js,svelte} ./src/*.{js,svelte}",
-        "prelint": "pnpm run format"
+        "prelint": "pnpm run format",
+        "check": "svelte-check --tsconfig ./tsconfig.json"
     },
     "devDependencies": {
         "@rollup/plugin-typescript": "^8.2.5",
