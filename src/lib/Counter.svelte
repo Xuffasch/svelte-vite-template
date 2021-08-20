@@ -1,14 +1,18 @@
 <script lang="ts">
+  import { writable } from 'svelte/store';
   import { printOnConsole } from './tools/console';
   let count = 0;
   let result: string;
+  let store = writable([]);
+  $store.length;
+
   const increment = () => {
     count += 1;
     printOnConsole(`That is current count ${count}`);
     addTwoThings(5, String(count));
   };
 
-  function addTwoThings(a: string, b: string): void {
+  function addTwoThings(a: number, b: string): void {
     console.log('the result : ', a + b);
   }
 </script>
