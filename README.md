@@ -537,5 +537,141 @@ To activate live application of lint rules, edit VSCode settings.json to add 'sv
   }
 ```
 
+# Typescript
+
+<h3 
+  style="padding: 4px; 
+  background: white; 
+  color: orangered"> 
+  Manually add Typescript to the template
+</h3>
+
+As this project has not been initialized with the official Svelte template but with a Vite/Svelte (js) template, we cannot use the setupTypescript.js script to add Typescript, as it has step where it updates a rollup config file that is internally taken care of by Vitejs.
+
+By mixing the steps in setupTypescript.js and the Vite svelte-ts template starting files, follow in order the following steps to add Typescript to the project
+
+- add the missing Typescript development dependencies :
+
+  svelte-check, svelte-preprocess, @rollup/plugin-typescript, typescript, tslib, @tsconfig/svelte
+
+- add a script to use svelte-check to scan for ts error in svelte components :
+
+  ```js
+    // package.json
+
+  {
+    ...
+    scripts{
+      ...
+      "check":"svelte-check --tsconfig ./tsconfig.json"
+    }
+  }
+  ```
+
+- change all .js files into .ts files
+
+- add 'lang="ts"' to all script tags in svelte components
+
+- create a tsconfig.json file in the root folder with:
+
+  ```js
+  {
+    "extends": "@tsconfig/svelte/tsconfig.json",
+    "include": [
+      "src/**/*.d.ts",
+      "src/**/*.ts",
+      "src/**/*.svelte"],
+    "exclude": ["node_modules/*", "public/*"]
+  }
+  ```
+
+  "compilerOptions" can be added later.
+
+- create a svelte.config.js file in root folder with :
+
+  ```js
+  import sveltePreprocess from 'svelte-preprocess';
+
+  export default {
+    preprocess: sveltePreprocess(),
+  };
+  ```
+
+- change 'lint' scripts to remove checks on .js files to checks on .ts files
+
+<h3 
+  style="padding: 4px; 
+  background: white; 
+  color: orangered"> 
+  Setup ESLint for Typescript
+</h3>
+
+After those steps, when I create a new variable with a type annotation, VSCode shows a parsing error. This error is due to the need of a specific parser for ESLint to read Typescript.
+
+Thanks to codechips [Eslint, Svelte and TypeScript][codechips] blog post, those are the steps to add an adapted parser
+
+- add the needed developement Dependencies
+
+  @typescript-eslint/parser @typescript-eslint/eslint-plugin
+
+- modify the .eslintrc.json
+
+  In the context of Vite, we cannot use an .eslintrc.js file as advised by the blog post, I had to check the instructions from eslint-plugin-svelte3 to settle on a working .json file.
+
+  ```js
+    // .eslintrc.json
+
+    {
+      "root": true,
+      "env": {
+        "browser": true,
+        "es2021": true
+      },
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "ecmaVersion": 12,
+        "sourceType": "module"
+      },
+      "plugins": ["svelte3", "@typescript-eslint"],
+      "overrides": [
+        {
+          "files": ["**/*.svelte"],
+          "processor": "svelte3/svelte3",
+          "rules": {
+            "quotes": ["warn", "single"]
+          }
+        }
+      ],
+      "settings": {
+        "svelte3/typescript": true
+      },
+      "extends": "eslint:recommended",
+      "rules": {
+        "quotes": ["warn", "single"]
+      }
+    }
+  ```
+
+  We need set :
+
+  - "parser" with "@typescript-eslint/parser"
+  - "plugin" with "@typescript-eslint"
+  - "settings" with `true` :
+
+    "settings" parameter in .eslintrc files provide shared variables to all plugins.
+
+    the [codechips][codehips] blog post used `require(typescript)` to give the typescript package to the svelte plugin as explained in the official eslint-plugin-svelte documentation.
+
+    As I'm working in the context of Vite, I cannot switch the .json file to .js file.
+    I choose the pass a `true` value which will pass typescript as a peer dependencies and it works. I'm relieved !
+
+I cannot add the type-aware lint checks described by eslint-plugin-svelte as it implies that I use an .eslintrc.js file which is not possible as I have just said. So I cannot detect the 'no-unsafe-member-access' error of a writable store value.
+
+However VSCode ESLint extension has now at least a correct parser so it does not display parsing error for unexpected token on simple TS variable declaration syntax.
+
 [eslint-environment]: https://eslint.org/docs/user-guide/configuring/language-options#specifying-environments
 [eslint-recommended]: https://eslint.org/docs/rules/
+[mdnsvelte]: https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/Svelte_getting_started
+[ivov-ts]: https://ivov.dev/posts/typescript
+[sv-vite-github]: https://github.com/Xuffasch/svelte-vite-template
+[codechips]: https://codechips.me/eslint-svelte-typescript/
