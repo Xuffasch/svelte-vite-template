@@ -660,14 +660,56 @@ Thanks to codechips [Eslint, Svelte and TypeScript][codechips] blog post, those 
 
     "settings" parameter in .eslintrc files provide shared variables to all plugins.
 
-    the [codechips][codehips] blog post used `require(typescript)` to give the typescript package to the svelte plugin as explained in the official eslint-plugin-svelte documentation.
+    the [codechips][codechips] blog post used `require(typescript)` to give the typescript package to the svelte plugin as explained in the official eslint-plugin-svelte documentation.
 
     As I'm working in the context of Vite, I cannot switch the .json file to .js file.
     I choose the pass a `true` value which will pass typescript as a peer dependencies and it works. I'm relieved !
 
-I cannot add the type-aware lint checks described by eslint-plugin-svelte as it implies that I use an .eslintrc.js file which is not possible as I have just said. So I cannot detect the 'no-unsafe-member-access' error of a writable store value.
+- Add type-aware lint checks (only on VSCode)
 
-However VSCode ESLint extension has now at least a correct parser so it does not display parsing error for unexpected token on simple TS variable declaration syntax.
+  Codechips blog setting is working in my case as I'm locked in to .json eslint config file. But type-aware rules proposed by @typescript-eslint can be detected in VSCode with these additions to the .eslintrc.json
+
+  ```js
+    // .eslintrc.json
+    {
+      ...
+      "parserOptions": {
+        ...
+        "project": "./tsconfig.json"
+        ...
+      },
+      "overrides": [
+        {
+          "files": ["**/*.svelte"],
+          "processor": "svelte3/svelte3",
+          "extends": [
+            "eslint:recommended",
+            "plugin:@typescript-eslint/recommended",
+            "plugin:@typescript-eslint/recommended-requiring-type-checking"
+          ],
+          "rules": {
+            "quotes": ["warn", "single"]
+          }
+        }
+      ],
+      ...
+    }
+  ```
+
+  For svelte files, declare the linting rules in the extends array and override them in the "rules" parameter.
+
+  Now VSCode is able to detect the unsafe-member-access to the writable store value.
+
+  However, the 'lint' script will fail to pickup the
+  svelte files error as it will only be able to pickup ts files.
+
+  Removing the "project" and the "extends" parameter values will allow the 'lint' script to detect svelte files error but the errors will not as rich as above.
+
+  There is maybe a setting to find to restore type-aware errors in the command line script, but it needs more understanding from @typescript-eslint plugin. For more information:
+
+  See [comments][type-aware-github] by gustavopch on Feb.6 2021.
+
+  See [Linting with Type Information][ts-eslint-type-aware] for checks provided by @typescript-eslint
 
 [eslint-environment]: https://eslint.org/docs/user-guide/configuring/language-options#specifying-environments
 [eslint-recommended]: https://eslint.org/docs/rules/
@@ -675,3 +717,5 @@ However VSCode ESLint extension has now at least a correct parser so it does not
 [ivov-ts]: https://ivov.dev/posts/typescript
 [sv-vite-github]: https://github.com/Xuffasch/svelte-vite-template
 [codechips]: https://codechips.me/eslint-svelte-typescript/
+[type-aware-github]: https://github.com/sveltejs/eslint-plugin-svelte3/issues/68#issuecomment-774531870
+[ts-eslint-type-aware]: https://github.com/typescript-eslint/typescript-eslint/blob/master/docs/getting-started/linting/TYPED_LINTING.md
