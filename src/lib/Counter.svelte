@@ -1,10 +1,16 @@
 <script lang="ts">
   import { printOnConsole } from './tools/console';
   let count = 0;
+  let result: string;
   const increment = () => {
     count += 1;
     printOnConsole(`That is current count ${count}`);
+    addTwoThings(5, String(count));
   };
+
+  function addTwoThings(a: string, b: string): void {
+    console.log('the result : ', a + b);
+  }
 </script>
 
 <button on:click={increment}>
