@@ -4,7 +4,7 @@
     "singleQuote": true,
     "trailingComma": "es5",
     "overrides": [{
-        "files": "src/lib/tools/**/*.js",
+        "files": "src/lib/tools/**/*.ts",
         "options": {
             "tabWidth": 2,
             "semi": true,
