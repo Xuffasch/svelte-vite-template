@@ -5,14 +5,15 @@
   let result: string;
   let store = writable([]);
   $store.length;
+  let hello = 'hello';
 
   const increment = () => {
     count += 1;
     printOnConsole(`That is current count ${count}`);
-    addTwoThings(5, String(count));
+    addTwoThings('hello', 'world');
   };
 
-  function addTwoThings(a: number, b: string): void {
+  function addTwoThings(a: boolean, b: string): void {
     console.log('the result : ', a + b);
   }
 </script>
