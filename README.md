@@ -675,7 +675,8 @@ Thanks to codechips [Eslint, Svelte and TypeScript][codechips] blog post, those 
       ...
       "parserOptions": {
         ...
-        "project": "./tsconfig.json"
+        "project": "./tsconfig.json",
+        "extraFileExtensions": [".svelte"]
         ...
       },
       "overrides": [
@@ -698,14 +699,34 @@ Thanks to codechips [Eslint, Svelte and TypeScript][codechips] blog post, those 
 
   For svelte files, declare the linting rules in the extends array and override them in the "rules" parameter.
 
+  Example of rules turn-off :
+
+  ```js
+    // .eslintrc.json
+
+    {
+      ...
+      "overrides": [
+        {
+          "files": ["**/*.svelte"],
+          "processor": "svelte3/svelte3",
+          "extends": [
+            "eslint:recommended",
+            "plugin:@typescript-eslint/recommended",
+            "plugin:@typescript-eslint/recommended-requiring-type-checking"
+          ],
+          "rules": {
+            "quotes": ["warn", "single"],
+            "@typescript-eslint/no-unsafe-member-access": "off",
+          }
+        }
+      ],
+    }
+
+  ```
+
   Now VSCode is able to detect the unsafe-member-access to the writable store value.
-
-  However, the 'lint' script will fail to pickup the
-  svelte files error as it will only be able to pickup ts files.
-
-  Removing the "project" and the "extends" parameter values will allow the 'lint' script to detect svelte files error but the errors will not as rich as above.
-
-  There is maybe a setting to find to restore type-aware errors in the command line script, but it needs more understanding from @typescript-eslint plugin. For more information:
+  The CLI command to lint should also be working.
 
   See [comments][type-aware-github] by gustavopch on Feb.6 2021.
 
