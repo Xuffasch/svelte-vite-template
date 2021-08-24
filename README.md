@@ -302,7 +302,9 @@ the '--plugin' parameter tells prettier where to find the svelte plugin as we ca
     {
       "files": ["**/*.svelte"],
       "processor": "svelte3/svelte3",
-      "quotes": ["warn", "double"]
+      "rules": {
+        "quotes": ["warn", "double"]
+      }
     }
   ],
   "extends": "eslint:recommended",
